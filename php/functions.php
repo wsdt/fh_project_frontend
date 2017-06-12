@@ -8,7 +8,6 @@ function createYearButtons () {
     $year = array();
 	foreach($folders as $folder) {
 		$year[$i++] = substr($folder,-4); // Jahreszahl (last 4 character) rausfiltern
-		//TODO: Nicht nur Nav öffnen sondern auch aktualisieren! refreshNav(".$year."); stattdessen an PHP-Funktion übergeben
 		echo "<input type='button' onclick='openNewNav(".$year[$i-1].")' class='yearbutton' id='".$year[$i-1]."' value='".$year[$i-1]."'/>"; //Jahreszahlenbuttons zurückgeben
 		//evtl. Submit draus machen damit createSitemap aufgerufen werden kann, so evtl. auch Jahreszahl übergebbar? (year als value), createSitemap aufrufen!
 		}
@@ -30,6 +29,12 @@ function createSitemap($year) { //ARRAY wird übergeben
 
 	}*/
 
+    //------------------------------------- NEU
+    // Alphabetisch alle Layer von vorne nach hinten in ein oder zwei Arrays speichern (1. Array: Layername, 2. Array: Layer selbst (evtl. assoziatives Array, dann nur eins)
+    //z.B. $all_layer_links['layername'] = "layer als objekt bzw. kml file";
+    //mit key() function ist für ein aktuelles Array (foreach tmp variable) der Index also Layername rückgebbar
+    //WICHTIG: Am besten obere Schleife erst danach über dieses Array, dann kann man genauso standardisiert sagen, was angezeigt werden soll.
+
     $all_layer_links = glob('layers/*/*.kml'); //speichere alle Layer rein
     $layerindex = 0;
     foreach ($all_layer_links as $link) {
@@ -49,7 +54,7 @@ function createSitemap($year) { //ARRAY wird übergeben
                         echo "window.map.removeLayer(all_layers[" . ($layerindex) . "]);"; //careful with inkrement
                     echo "} else {";
                         echo "tmpelement.className += ' layerlink_active';";
-                        echo "window.map.addLayer(all_layers[" . ($layerindex) . "]);"; //TODO: Hier entsteht k of undefined ERROR
+                        echo "window.map.addLayer(all_layers[" . ($layerindex) . "]);";
                     $layerindex++; //Layerindex für nächsten Durchlauf erhöhen.
                     echo "}});});";
         echo "</script>";
@@ -62,11 +67,6 @@ function createSitemap($year) { //ARRAY wird übergeben
             $layername = substr($layer, 12, strlen(substr($layer, 12)) - 4); //remove file extension and file-path
             echo "<a href='#' id='" . strtolower($layername) . "' class='yearlink link_".$year[$j]."'>" . $layername . "</a>";
 
-            //------------------------------------- NEU
-            // Alphabetisch alle Layer von vorne nach hinten in ein oder zwei Arrays speichern (1. Array: Layername, 2. Array: Layer selbst (evtl. assoziatives Array, dann nur eins)
-            //z.B. $all_layer_links['layername'] = "layer als objekt bzw. kml file";
-            //mit key() function ist für ein aktuelles Array (foreach tmp variable) der Index also Layername rückgebbar
-            //WICHTIG: Am besten obere Schleife erst danach über dieses Array, dann kann man genauso standardisiert sagen, was angezeigt werden soll.
 
             //------------------------------------- ALT
             //calculate layer for operating for each layer (also verschachtelte foreach)

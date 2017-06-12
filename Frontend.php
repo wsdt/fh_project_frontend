@@ -53,6 +53,7 @@
 	
 	<!-- DIV-Tag fuer Map -->
 	<div id="map"></div>
+    <div id="slider"></div>
 	
 	<?php
 	// Lade rechte Sidebar (Objekte ausklappbar und anzeigen/ausblenden beim Anklicken (schon vorher laden, damit schneller)
