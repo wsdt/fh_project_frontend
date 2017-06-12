@@ -114,7 +114,7 @@ function openNewNav(year) {
     yearbuttons = document.getElementsByClassName('yearbutton');
     alllinks = document.getElementsByClassName('yearlink');
     seeablelinks = document.getElementsByClassName("link_"+year);
-    console.log(yearbuttons);console.log(alllinks);console.log(seeablelinks);
+    //console.log(yearbuttons);console.log(alllinks);console.log(seeablelinks);
 
 //evtl. auch altes Jahr �bergeben ODER einfach bei allen anderen Buttons pr�fen ob vorhanden und entfernen
     document.getElementById("mySidenav").style.width = "250px";
@@ -133,6 +133,9 @@ function openNewNav(year) {
 	for (var k = 0; k<seeablelinks.length;k++) {
 		seeablelinks.item(k).style.display = "block";
 	}
+
+	//Remove all layers when year gets switched
+	removeAllLayers();
 
 	document.getElementById(year).style.backgroundColor = "rgba(204,204,204,1)";    //Active zur Klasse hinzuf�gen (noch nicht getestet) // Hier auch active von vorherigem Button entfernen nicht bei close!
     document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
@@ -154,20 +157,14 @@ function closeNav(year) {
     //document.getElementById(year).classList.remove = "active"; //Active von der Klasse entfernen
 }
 
-
-/*JQUERY TEST für remove HIER ABER WIEDER ENTFERNEN
-
-$(document).ready(function() {
-$('#LAYERID_PHPVAR ').on('click', function() {
-	var tmpelement = document.getElementById('LAYERID_PHPVAR');
-if (tmpelement.className.indexOf('layerlink_active') !== -1) {
-	tmpelement.classList.remove('layerlink_active');
-	window.map.removeLayer(all_layers['layerindex']); //careful with inkrement
-} else {
-    tmpelement.className += "layerlink_active";
-    window.map.addLayer(all_layers[" . ($layerindex++) . "]); //Layerindex für nächsten Durchlauf erhöhen.
+function removeAllLayers() {
+	/*for (var i = (map.layers.length - 1); i >= 0; i--) {
+	 map.removeLayer(map.layers[i]);
+	 }*/
+	var activelayers = document.getElementsByClassName('layerlink_active'); //TODO: Reagiert nicht, keine Fehlermeldung
+	for (var l of activelayers) {
+		map.removeLayer(l);
+	}
 }
-});
-});
 
-*/
+

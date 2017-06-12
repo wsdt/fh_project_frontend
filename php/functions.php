@@ -49,7 +49,8 @@ function createSitemap($year) { //ARRAY wird übergeben
                         echo "window.map.removeLayer(all_layers[" . ($layerindex) . "]);"; //careful with inkrement
                     echo "} else {";
                         echo "tmpelement.className += ' layerlink_active';";
-                        echo "window.map.addLayer(all_layers[" . ($layerindex++) . "]);"; //Layerindex für nächsten Durchlauf erhöhen.
+                        echo "window.map.addLayer(all_layers[" . ($layerindex) . "]);"; //TODO: Hier entsteht k of undefined ERROR
+                    $layerindex++; //Layerindex für nächsten Durchlauf erhöhen.
                     echo "}});});";
         echo "</script>";
     }
