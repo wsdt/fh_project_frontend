@@ -153,3 +153,21 @@ function closeNav(year) {
     document.body.style.backgroundColor = "white";
     //document.getElementById(year).classList.remove = "active"; //Active von der Klasse entfernen
 }
+
+
+/*JQUERY TEST für remove HIER ABER WIEDER ENTFERNEN
+
+$(document).ready(function() {
+$('#LAYERID_PHPVAR ').on('click', function() {
+	var tmpelement = document.getElementById('LAYERID_PHPVAR');
+if (tmpelement.className.indexOf('layerlink_active') !== -1) {
+	tmpelement.classList.remove('layerlink_active');
+	window.map.removeLayer(all_layers['layerindex']); //careful with inkrement
+} else {
+    tmpelement.className += "layerlink_active";
+    window.map.addLayer(all_layers[" . ($layerindex++) . "]); //Layerindex für nächsten Durchlauf erhöhen.
+}
+});
+});
+
+*/

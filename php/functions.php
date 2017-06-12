@@ -39,14 +39,19 @@ function createSitemap($year) { //ARRAY wird übergeben
         //echo "Name: ".$layername." / Jahr: ".$layeryear;
         echo "<a href='#' id='".$layerid."' class='yearlink link_".$layeryear."'>".$layername."</a>";
 
-        //Make layers addable (layers assigned chronologically) NICHT LÖSCHEN MUSS JA LAYERS ADDEN KÖNNEN
-        echo "<script type='text/javascript'>" .
-            "$(document).ready(function() {" .
-            "$('#" . $layerid . "').on('click', function() {" .
-            "map.addLayer(all_layers[" . ($layerindex++) . "]);" . //Layerindex für nächsten Durchlauf erhöhen.
-            "});" .
-            "});</script>";        //TODO: remove dann auch hinzufügen auch hier gleich mit in Schleife
-
+        //Make layers addable/removeable (layers assigned chronologically) NICHT LÖSCHEN MUSS JA LAYERS ADDEN KÖNNEN
+        echo "<script type='text/javascript'>";
+            echo "$(document).ready(function() {";
+                echo "$('#".$layerid."').on('click', function() {";
+                    echo "var tmpelement = document.getElementById('".$layerid."');";
+                    echo "if (tmpelement.className.indexOf('layerlink_active') !== -1) {"; //Prüfe ob Layer bereits gesetzt (über gesetzte Klasse, siehe addLayer
+                        echo "tmpelement.classList.remove('layerlink_active');";
+                        echo "window.map.removeLayer(all_layers[" . ($layerindex) . "]);"; //careful with inkrement
+                    echo "} else {";
+                        echo "tmpelement.className += 'layerlink_active';";
+                        echo "window.map.addLayer(all_layers[" . ($layerindex++) . "]);"; //Layerindex für nächsten Durchlauf erhöhen.
+                    echo "}});});";
+        echo "</script>";
     }
 
     /* OLD VERSION, did not work as expected
