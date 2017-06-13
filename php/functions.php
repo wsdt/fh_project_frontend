@@ -8,9 +8,13 @@ function createYearButtons () {
     $year = array();
 	foreach($folders as $folder) {
 		$year[$i++] = substr($folder,-4); // Jahreszahl (last 4 character) rausfiltern
-		echo "<input type='button' onclick='openNewNav(".$year[$i-1].")' class='yearbutton' id='".$year[$i-1]."' value='".$year[$i-1]."'/>"; //Jahreszahlenbuttons zurückgeben
-		//evtl. Submit draus machen damit createSitemap aufgerufen werden kann, so evtl. auch Jahreszahl übergebbar? (year als value), createSitemap aufrufen!
+		//BUTTONS: aktiv bis Slider update
+        echo "<input type='button' onclick='openNewNav(".$year[$i-1].")' class='yearbutton' id='".$year[$i-1]."' value='".$year[$i-1]."'/>"; //Jahreszahlenbuttons zurückgeben
 		}
+    //SLIDER:
+    /*echo "<script type='text/javascript'>createSlider();</script>";
+    echo "<div id='#slider' onblur='openNewNav(".$year[$i-1].")'></div>";*/
+
 	$countedkml = countKmlFiles(0); //make hidden field with counted kml files
 	//echo "</form></div>";
     echo "</div>";

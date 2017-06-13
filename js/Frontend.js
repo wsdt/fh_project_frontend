@@ -191,29 +191,29 @@ function closeNav(year) {
 
 //function createSlider() {
 function createSlider() { //TODO: Instead of year buttons
-$(function() {
-    var values = [0, 10, 50, 60, 70, 80, 90, 91, 92, 93, 94, 95, 100]; //Hier rein Jahre von PHP laden
-    var slider = $("#slider").slider({
-        slide: function(event, ui) {
-            var includeLeft = event.keyCode != $.ui.keyCode.RIGHT;
-            var includeRight = event.keyCode != $.ui.keyCode.LEFT;
-            slider.slider('option', 'value', findNearest(includeLeft, includeRight, ui.value));
-            return false;
-        }
-    });
-    function findNearest(includeLeft, includeRight, value) {
-        var nearest = null;
-        var diff = null;
-        for (var i = 0; i < values.length; i++) {
-            if ((includeLeft && values[i] <= value) || (includeRight && values[i] >= value)) {
-                var newDiff = Math.abs(value - values[i]);
-                if (diff == null || newDiff < diff) {
-                    nearest = values[i];
-                    diff = newDiff;
+    $(function() {
+        var values = [0,9,12,14]; //Hier rein Jahre von PHP laden
+        var slider = $("#slider").slider({
+            slide: function(event, ui) {
+                var includeLeft = event.keyCode !== $.ui.keyCode.RIGHT;
+                var includeRight = event.keyCode !== $.ui.keyCode.LEFT;
+                slider.slider('option', 'value', findNearest(includeLeft, includeRight, ui.value));
+                return false;
+            }
+        });
+        function findNearest(includeLeft, includeRight, value) {
+            var nearest = null;
+            var diff = null;
+            for (var i = 0; i < values.length; i++) {
+                if ((includeLeft && values[i] <= value) || (includeRight && values[i] >= value)) {
+                    var newDiff = Math.abs(value - values[i]);
+                    if (diff === null || newDiff < diff) {
+                        nearest = values[i];
+                        diff = newDiff;
+                    }
                 }
             }
+            return nearest;
         }
-        return nearest;
-    }
-});
+    });
 }
