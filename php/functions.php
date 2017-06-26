@@ -137,10 +137,10 @@ function createNewDropdown($mainpoint, $subs) { //Erstelle neuen Hauptpunkt, der
         echo "ERROR: \$subs is not an array!";
     }
 
-    echo "<li class='right_sidebar_mainpoint'>".$mainpoint;
-    foreach($subs as $sub)
-
-    echo "<li class='right_sidebar_subpoint'></li>";
+    echo "<li class='right_sidebar_mainpoint'>".ucfirst(key($mainpoint)); //Gib Schlüssel des assoziativen Arrays zurück
+    foreach($subs as $sub) {
+        echo "<li class='right_sidebar_subpoint'>".ucfirst($sub)."</li>"; //TODO:Hier auch Schlüssel ausgeben, und Link a href mit Wert des assoziativen Arrays
+    }
     echo "</li>";
 
 }
