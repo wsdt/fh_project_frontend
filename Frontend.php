@@ -28,15 +28,8 @@
  
 	// Lade Jahreszahlen-Buttons
     $year = createYearButtons();
-	
 
-	
-	
-	
 	// Lade linke Sidebar (Layer ausklappbar und auswählbar) Skript zum Ausklappen selbst in Frontend.JS
-	/* TODO: Funktion aufrufen, um linke Sidebar zu aktualisieren (Inhalt von Jahresfolder auflisten und automatisch ausklappen)
-	geschieht aber erst nach anklicken von einem oder mehreren Jahren, standardmäßig erstes Jahr anzeigen, erst nach anklicken von Burg/Landesgrenzen o.Ä. wird ein Layer
-	hinzugefügt oder bei zweimaligem Klicken entfernt (wenn aktiv, dann sollte das erkenntlich sein)*/
 	?>
 	<div id="chooseYearLayers">
 		<div id="mySidenav" class="sidenav">
@@ -62,7 +55,7 @@
 	
 	<?php
 	// Lade rechte Sidebar (Objekte ausklappbar und anzeigen/ausblenden beim Anklicken (schon vorher laden, damit schneller)
-	
+	createRightSidebar();
 
 ?>
 

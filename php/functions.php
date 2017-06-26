@@ -1,5 +1,6 @@
 <?php 
-
+//--------------------------------------------------------------------------------------------
+//TOP (YEAR-Buttons)
 function createYearButtons () {
 	$folders = glob('layers/*', GLOB_ONLYDIR);
 	echo "<div class='yearButtons'>";
@@ -21,6 +22,8 @@ function createYearButtons () {
     return $year;
 }
 
+//----------------------------------------------------------------------------------------------
+//LEFT (Left-Sidebar)
 function createSitemap($year) { //ARRAY wird übergeben
 	//hier if class enthält active, dann id als Variable speichern
 	/*if (empty($_REQUEST)) {
@@ -118,5 +121,29 @@ function countKmlFiles($modus) {
 		return $counted;
 	}
 }
+//------------------------------------------------------------------------------------------------------
+// Right Sidebar
+function createRightSidebar() {
+
+}
+
+function createNewDropdown($mainpoint, $subs) { //Erstelle neuen Hauptpunkt, der noch Unterpunkte hat
+    /*z.B. Hauptpunkt = 1.ter Übergabeparameter, zweiter Übergabeparameter ist ein normales Array [0,..,10] mit möglichen 10 assoziativen Arrays.
+    Jeder Parameter muss als assoziatives Array übergeben werden: SichtbarerNameDesMenuepunkts -> WertDahinter(z.B. Link zum Inhalt)
+    --> Die Unterpunkte sind wie oben erwähnt, verschachtelte Arrays*/
+    $count_subs = count($subs); //Zähle Anzahl der Unterpunkte
+
+    if(!is_array($subs)) {
+        echo "ERROR: \$subs is not an array!";
+    }
+
+    echo "<li class='right_sidebar_mainpoint'>".$mainpoint;
+    foreach($subs as $sub)
+
+    echo "<li class='right_sidebar_subpoint'></li>";
+    echo "</li>";
+
+}
+
 
 ?>
