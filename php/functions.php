@@ -124,22 +124,49 @@ function countKmlFiles($modus) {
 //------------------------------------------------------------------------------------------------------
 // Right Sidebar
 function createRightSidebar() {
+    echo "<div id='right_sidebar'>";
+    echo "<a href=\"javascript:void(0)\" class=\"closebtn\" onclick=\"closeRightSidebar()\">&times;</a>";
+    echo "<ul id='rs_list'>";
 
+    //TODO: CREATE HERE ALL DROPDOWNS YOU WANT --> automatically by paths and save them in an array or do it in the method itself?!
+    //TODO: Create here assoziative arrays for each year (=folder).
+
+
+
+    $points['_Hauptpunkt'] = "LINKzuObjekt"; //Hauptpunkte müssen mit einem Unterstrich beginnen, wird bei der Ausgabe aber nicht angezeigt.
+    $points['Subpunkt 1'] = "LinkzuUnterobjekt";
+    $points['Subpunkt 2'] = "LinkZuUnteremObjekt";
+    createNewDropdown($points,"123");
+    echo "</ul></div>";
 }
 
-function createNewDropdown($mainpoint, $subs) { //Erstelle neuen Hauptpunkt, der noch Unterpunkte hat
-    /*z.B. Hauptpunkt = 1.ter Übergabeparameter, zweiter Übergabeparameter ist ein normales Array [0,..,10] mit möglichen 10 assoziativen Arrays.
-    Jeder Parameter muss als assoziatives Array übergeben werden: SichtbarerNameDesMenuepunkts -> WertDahinter(z.B. Link zum Inhalt)
-    --> Die Unterpunkte sind wie oben erwähnt, verschachtelte Arrays*/
-    $count_subs = count($subs); //Zähle Anzahl der Unterpunkte
+function createNewDropdown($points, $unique_string) { //Erstelle neuen Hauptpunkt, der noch Unterpunkte hat
+    /*z.B. Hauptpunkt = $points[0], restliche Indizes sind die Unterpunkte. Jeder Inhalt des Arrays ist selbst ein assoziatives Array.
+    Der Parameter muss als assoziative Arrays in einem numerischen Array übergeben werden: bei $points[1]: SichtbarerNameDesMenuepunkts -> WertDahinter(z.B. Link zum Inhalt)
+    UNQIUE_STRING = willkürlicher String, um Unterpunkte eines Hauptpunkts von einem anderen zu unterscheiden.
+    */
+    //$count_subs = count($points); //Zähle Anzahl der Unterpunkte
 
-    if(!is_array($subs)) {
-        echo "ERROR: \$subs is not an array!";
+    if(!is_array($points)) {
+        echo "ERROR: \$points is not an array!";
     }
 
-    echo "<li class='right_sidebar_mainpoint'>".ucfirst(key($mainpoint)); //Gib Schlüssel des assoziativen Arrays zurück
-    foreach($subs as $sub) {
-        echo "<li class='right_sidebar_subpoint'>".ucfirst($sub)."</li>"; //TODO:Hier auch Schlüssel ausgeben, und Link a href mit Wert des assoziativen Arrays
+    /* $mainpoint = 'IndexAlsString'->'WertHinterIndexAlsLayerOderObjektEtc'
+    $subs = numerisches Array wobei z.B. $subs[0] = 'IndexAlsString'->'WertHinterIndexAlsLayerOderObjektEtc'
+    */
+
+    foreach($points as $point) {
+        $value = $point;
+        $name = ucfirst(array_search($point, $points));
+        $pos_isMainpoint = strpos($name, '_');
+
+        if ($pos_isMainpoint !== false && $pos_isMainpoint == 0) { //Punkt ist nur Oberpunkt wenn Unterstrich an erster Stelle
+            //Hier Onclick-Funktion zum Ein- und Ausklappen der Punkte
+            echo "<li class='mainpoint'><span onclick=rs_ShowHideSubpoints('".$unique_string."')> " . substr($name,1)."</span>"; //Gib Schlüssel des assoziativen Arrays zurück
+        } else {
+            echo "<li class='subpoint hidden " . $unique_string . "'><a href='$value'>" . $name . "</a></li>"; //Hier auch Schlüssel ausgeben, und Link a href mit Wert des assoziativen Arrays
+            // Class 'hidden' = hide sub links
+        }
     }
     echo "</li>";
 

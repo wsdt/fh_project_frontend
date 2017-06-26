@@ -8,7 +8,7 @@
     <script src="https://openlayers.org/en/v4.0.1/build/ol.js" type="text/javascript"></script>
     <script src="js/jquery-3.2.1.min.js" type="text/javascript"></script> <!-- integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous" -->
     <script src="js/jquery-ui-1.9.2.custom/js/jquery-ui-1.9.2.custom.min.js" type="text/javascript"></script> <!-- Für Zeitleiste -->
-    <link rel="stylesheet" href="css\Frontend.css" type="text/css"/>
+    <link rel="stylesheet" href="css/Frontend.css" type="text/css"/>
     <script src="js/Frontend.js" type="text/javascript"></script>
     <!-- Für Slider -->
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">

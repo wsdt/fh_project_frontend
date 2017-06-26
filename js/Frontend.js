@@ -169,7 +169,7 @@ function openNav() {
 }
 
 /* Set the width of the side navigation to 0 and the left margin of the page content to 0, and the background color of body to white */
-function closeNav(year) {
+function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
     //document.getElementById("main").style.marginLeft = "0"; //Auskommentiert, da main auskommentiert. 
     document.body.style.backgroundColor = "white";
@@ -177,30 +177,54 @@ function closeNav(year) {
 }
 
 /*function removeAllLayers() {
-    EINGESTELLT, da wenn Layers bei Jahreswechsel nicht entfernt: Jahresvergleich möglich
+ EINGESTELLT, da wenn Layers bei Jahreswechsel nicht entfernt: Jahresvergleich möglich
 
-    /*for (var i = (map.layers.length - 1); i >= 0; i--) {
-     map.removeLayer(map.layers[i]);
-     }
-    var activelayers = document.getElementsByClassName('layerlink_active'); //TODO: Reagiert nicht, keine Fehlermeldung
-    for (var l of activelayers) {
-        map.removeLayer(l);
+ /*for (var i = (map.layers.length - 1); i >= 0; i--) {
+ map.removeLayer(map.layers[i]);
+ }
+ var activelayers = document.getElementsByClassName('layerlink_active'); //TODO: Reagiert nicht, keine Fehlermeldung
+ for (var l of activelayers) {
+ map.removeLayer(l);
+ }
+ }*/
+
+// RIGHT SIDEBAR ----------------------------------------------------
+function closeRightSidebar() {
+    document.getElementById("right_sidebar").style.width = "0";
+    document.body.style.backgroundColor = "white";
+}
+
+function openRightSidebar() {
+    document.getElementById("right_sidebar").style.width = "250px";
+    document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+}
+
+function rs_ShowHideSubpoints(uniquestring) { //Ein-/Ausklappen der Unterpunkte in der rechten Sidebar.
+    const SUB_POINTS = document.getElementsByClassName(uniquestring);
+
+    for (sub_point of SUB_POINTS) {
+        if (sub_point.className.indexOf('hidden') !== -1) {
+            sub_point.classList.remove('hidden');
+        } else {
+            sub_point.classList.add('hidden');
+        }
     }
-}*/
+}
 
 
-//function createSlider() {
+// SLIDER (ALPHA) --------------------------------------------------
 function createSlider() { //TODO: Instead of year buttons
-    $(function() {
-        var values = [0,9,12,14]; //Hier rein Jahre von PHP laden
+    $(function () {
+        var values = [0, 9, 12, 14]; //Hier rein Jahre von PHP laden
         var slider = $("#slider").slider({
-            slide: function(event, ui) {
+            slide: function (event, ui) {
                 var includeLeft = event.keyCode !== $.ui.keyCode.RIGHT;
                 var includeRight = event.keyCode !== $.ui.keyCode.LEFT;
                 slider.slider('option', 'value', findNearest(includeLeft, includeRight, ui.value));
                 return false;
             }
         });
+
         function findNearest(includeLeft, includeRight, value) {
             var nearest = null;
             var diff = null;
