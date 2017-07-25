@@ -107,21 +107,6 @@ if (countKmlFiles !== all_layers.length) {
     console.warn("WARNING: You will get an Error, when you try to add a Layer, which is not configured! (e.g. 'Cannot read property 'ko' of undefined)")
 }
 
-/*
- //OLD Version: For Hidden Formfield instead of Div
- var name = "countKmlFiles";
- if (name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search)) {
- if (decodeURIComponent(name[1]) != all_layers.length) {
- alert("WARNING [1]: Your layer-configuration is not up-to-date!");
- }
- }*/
-
-
-//document.getElementById("layerarr").value = JSON.stringify(all_layers); //circular reference
-//im prinzip muss ich aber nur auf dieses Array im PHP-Skript zugreifen k�nnen.
-
-//}
-
 
 // LEFT: Sidebar
 /* Set the width of the side navigation to 250px and the left margin of the page content to 250px and add a black background color to body */
@@ -185,7 +170,7 @@ function closeNav() {
  /*for (var i = (map.layers.length - 1); i >= 0; i--) {
  map.removeLayer(map.layers[i]);
  }
- var activelayers = document.getElementsByClassName('layerlink_active'); //TODO: Reagiert nicht, keine Fehlermeldung
+ var activelayers = document.getElementsByClassName('layerlink_active'); //Reagiert nicht, keine Fehlermeldung
  for (var l of activelayers) {
  map.removeLayer(l);
  }

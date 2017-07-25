@@ -16,7 +16,8 @@ function createYearButtons () {
     /*echo "<script type='text/javascript'>createSlider();</script>";
     echo "<div id='#slider' onblur='openNewNav(".$year[$i-1].")'></div>";*/
 
-	$countedkml = countKmlFiles(0); //make hidden field with counted kml files
+	countKmlFiles(0, false); //make hidden field with counted kml files
+    countKmlFiles(0,true); //make hidden field with counted objects (kml files) for rs_objects_layerconfig.js
 	//echo "</form></div>";
     echo "</div>";
     return $year;
@@ -60,15 +61,33 @@ function createSitemap($year) { //ARRAY wird übergeben
     echo "<script type='text/javascript'>openNewNav(".$year[0].");</script>"; //Lade aktuelles Jahr bei Erstaufruf, in OpenNewNav() wird auch rs_ChangeYear() aufgerufen um die rechte Sidebar anzuzeigen
 }
 
-function countKmlFiles($modus) {
-	$counted = count(glob('layers/*/*.kml'));
-	if ($modus == 0) {
+function countKmlFiles($modus,$only_objects) {
+    /*MODUS entscheidet ob ein Input-Feld oder nur ein Rückgabewert zurückgegeben wird.
+    * ONLY_OBJECTS (bool) entscheidet, ob nur die Layer in der linken Sidebar oder nur in der rechten Sidebar berechnet werden sollen.
+     */
+    if ($only_objects == true) {
+        $pattern = 'layers/*/additional_data/*.kml';
+    } else {
+        $pattern = 'layers/*/*.kml';
+    }
+    $counted = count(glob($pattern)); //Count it, maybe this value will be overwritten
+
+    //var_dump(preg_grep('/^\d{6}__.+\.kml$/',glob($pattern), PREG_GREP_INVERT));
+	if ($modus == 0 && $only_objects == true) {
+
+	    $counted = 0;
+	    foreach(glob($pattern) as $file) {
+            if (!preg_match('/^[0-9]{6}__.+\.kml$/i', substr($file,28))) {
+                $counted++;
+            }
+        }
+
+        echo "<div id='object_kml_count' style='display:none;'>".$counted."</div>";
+	} else if ($modus == 0) {
 	    //echo "<script type='text/javascript'>console.log('div created')</script>";
 		echo "<div id='countKmlFiles' style='display:none;'>".$counted."</div>";
-		return $counted; //vorbehaltlich mal zurückgeben
-	} else {
-		return $counted;
 	}
+	return $counted;
 }
 //------------------------------------------------------------------------------------------------------
 // Right Sidebar
@@ -119,6 +138,7 @@ function createRightSidebar() {
         $points['Subpunkt 2'] = "LinkZuUnteremObjekt";
         createNewDropdown($points,"123"); //Standardmäßig werden alle zwar erstellt aber nicht angezeigt (inkl. Mainpoints)
         */
+
     }
 
     echo "</ul></div>";
@@ -157,6 +177,28 @@ function createNewDropdown($points, $unique_string) { //Erstelle neuen Hauptpunk
             echo "<li class='rspoint subpoint hidden ".$year. "_" . $unique_string . "'><a href='$value'>" . substr($name,1) . "</a></li>"; //Hier auch Schlüssel ausgeben, und Link a href mit Wert des assoziativen Arrays
             // Class 'hidden' = hide links // Year in Kombination mit UniqueString verhindert, dass Subpoints anderer Jahre eingeblendet werden, wenn doch derselbe UniqueString verwendet wird.
         }
+
+
+
+        //TODO: Assign LayerOnclick-Property
+        /*//Make layers addable/removeable (layers assigned chronologically) NICHT LÖSCHEN MUSS JA LAYERS ADDEN KÖNNEN
+        echo "<script type='text/javascript'>";
+        echo "$(document).ready(function() {";
+        echo "$('#".$layerid."').on('click', function() {";
+        echo "var tmpelement = document.getElementById('".$layerid."');";
+        echo "if (tmpelement.className.indexOf('layerlink_active') !== -1) {"; //Prüfe ob Layer bereits gesetzt (über gesetzte Klasse, siehe addLayer
+        echo "tmpelement.classList.remove('layerlink_active');";
+        echo "window.map.removeLayer(all_layers[" . ($layerindex) . "]);"; //careful with inkrement
+        echo "} else {";
+        echo "tmpelement.className += ' layerlink_active';";
+        echo "window.map.addLayer(all_layers[" . ($layerindex) . "]);";
+        $layerindex++; //Layerindex für nächsten Durchlauf erhöhen.
+        echo "}});});";
+        echo "</script>";*/
+
+
+
+
     }
     echo "</li>"; //schließe mainpoint
 
