@@ -64,8 +64,16 @@ all_objects.push(y1560, y1880, y2016);
 
 // --------------------------------------------------------------------------------------------
 //Alert if amount of added layers (=array) and counted Kml-files in your directionary does not equal.
-//TODO: Hier noch counted kml files - mainpoints (__) evtl.-->!!! gleich schon richtig ins Feld über PHP speichern!!
-if (document.getElementById('object_kml_count').innerHTML !== all_layers.length) {
+//Count configured objects
+var count_configuredObj = 0;
+for (var yearobj of all_objects) {
+    for (var k = 0; k < yearobj.length; k++) {
+        count_configuredObj++;
+    }
+}
+
+//Same amount of configured objects and available objects? (= kml Files)
+if (document.getElementById('object_kml_count').innerHTML !== all_objects.length) {
     alert("WARNING [RS]: \nYour object-configuration is not up-to-date!");
     console.warn("WARNING: Also non configured-objects will produce errors (e.g. Cannot read property 'ko' of undefined.");
 }
