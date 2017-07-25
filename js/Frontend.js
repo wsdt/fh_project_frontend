@@ -125,7 +125,7 @@ if (countKmlFiles !== all_layers.length) {
 
 // LEFT: Sidebar
 /* Set the width of the side navigation to 250px and the left margin of the page content to 250px and add a black background color to body */
-function openNewNav(year) {
+function openNewNav(year) { //will be called by page load and rs_YearChange()
     var yearbuttons = null;
     var alllinks = null;
     var seeablelinks = null;
@@ -158,16 +158,12 @@ function openNewNav(year) {
 
     document.getElementById(year).style.backgroundColor = "rgba(204,204,204,1)";    //Active zur Klasse hinzuf�gen (noch nicht getestet) // Hier auch active von vorherigem Button entfernen nicht bei close!
     document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
-
-    // REFRESH right Sidebar (this line is quite important!)
-    rs_YearChange(year);
-
 }
 
 
 function openNav() {
     document.getElementById("mySidenav").style.width = "250px";
-    //document.getElementById("main").style.marginLeft = "250px"; //Auskommentiert, da main auskommentiert. 
+    //document.getElementById("main").style.marginLeft = "250px"; //Auskommentiert, da leftSidebar genug Platz hat.
     document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
 
     /*if (document.getElementsByClassName(year).length !== 0) {
@@ -199,14 +195,18 @@ function closeNav() {
 function closeRightSidebar() {
     document.getElementById("right_sidebar").style.width = "0";
     document.body.style.backgroundColor = "white";
+    document.getElementById("yearButtons").style.right = "0";
 }
 
 function openRightSidebar() {
     document.getElementById("right_sidebar").style.width = "250px";
     document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+    document.getElementById("yearButtons").style.right = "250px";
 }
 
-function rs_YearChange(year) { //Function will be called in OpenNewNav()
+function rs_YearChange(year) { //Function will be called by Onclick-Yearbuttons
+    openNewNav(year); //also open left sidebar when year gets changed
+
     //Nur Mainpoints einblenden, für Subpoints ist rs_ShowHideSubpoints() zuständig
     const ALLPOINTS = document.getElementsByClassName('rspoint'); /*$('rspoint');*/
     const YEARPOINTS = document.getElementsByClassName(year); //$(year);
@@ -221,8 +221,9 @@ function rs_YearChange(year) { //Function will be called in OpenNewNav()
         }
     }
 
-    if (YEARPOINTS.length === 0) {
+    if (YEARPOINTS.length === 0 && ALLPOINTS.length > 0) { //Wenn gar keine Daten vorhanden sind (für kein Jahr), dann gib auch keine Warnung aus.
         console.warn("WARNING: Selected year has NO additional data!");
+        closeRightSidebar(); //close right sidebar (maybe it was opened before)
     } else {
         //Show only mainpoints of the year
         for (var b = 0; b < YEARPOINTS.length; b++) {

@@ -3,14 +3,14 @@
 //TOP (YEAR-Buttons)
 function createYearButtons () {
 	$folders = glob('layers/*', GLOB_ONLYDIR);
-	echo "<div class='yearButtons'>";
+	echo "<div id='yearButtons'>";
 	//echo "<form name='yearSelection' id='yearSelection' action='".$_SERVER['PHP_SELF']."' />";
 	$i=0; //tmp var fürs Durchzählen (Array)
     $year = array();
 	foreach($folders as $folder) {
 		$year[$i++] = substr($folder,-4); // Jahreszahl (last 4 character) rausfiltern
 		//BUTTONS: aktiv bis Slider update
-        echo "<input type='button' onclick='openNewNav(".$year[$i-1].")' class='yearbutton' id='".$year[$i-1]."' value='".$year[$i-1]."'/>"; //Jahreszahlenbuttons zurückgeben
+        echo "<input type='button' onclick='rs_YearChange(".$year[$i-1].")' class='yearbutton' id='".$year[$i-1]."' value='".$year[$i-1]."'/>"; //Jahreszahlenbuttons zurückgeben
 		}
     //SLIDER:
     /*echo "<script type='text/javascript'>createSlider();</script>";
@@ -37,7 +37,7 @@ function createSitemap($year) { //ARRAY wird übergeben
         $layername = substr ($link,12,strlen(substr($link,12))-4); //remove file extension and file path
         $layeryear = substr ($link,7,4);
         $layerid = $layeryear."_".strtolower($layername);
-        //echo "Name: ".$layername." / Jahr: ".$layeryear;
+
         echo "<a href='#' id='".$layerid."' class='yearlink link_".$layeryear."'>".$layername."</a>";
 
         //Make layers addable/removeable (layers assigned chronologically) NICHT LÖSCHEN MUSS JA LAYERS ADDEN KÖNNEN
@@ -57,9 +57,7 @@ function createSitemap($year) { //ARRAY wird übergeben
     }
 
     //Dadurch, dass Reload weg (nun Array ohne $_REQUEST verfügbar)
-    echo "<script type='text/javascript'>openNewNav('".$year[0]."');"; //Lade aktuelles Jahr bei Erstaufruf
-    echo "rs_YearChange('".$year[0]."');</script>"; //rs_YearChange aktualisiert rechte Sidebar und öffnet diese automatisch.
-
+    echo "<script type='text/javascript'>openNewNav(".$year[0].");</script>"; //Lade aktuelles Jahr bei Erstaufruf, in OpenNewNav() wird auch rs_ChangeYear() aufgerufen um die rechte Sidebar anzuzeigen
 }
 
 function countKmlFiles($modus) {
@@ -155,7 +153,7 @@ function createNewDropdown($points, $unique_string) { //Erstelle neuen Hauptpunk
             echo "<li class='".$year." rspoint mainpoint hidden m_".$year. "_" . $unique_string . "'><span onclick=rs_ShowHideSubpoints('".$year."_".$unique_string."')> " . substr($name,2)."</span>"; //Gib Schlüssel des assoziativen Arrays zurück
             //Mainpoint darf den Präfix nicht als Klasse verwenden, da dieser sonst mit ein-/ausgeblendet wird beim Anklicken! Deshalb 'm_{prefix}', so auch dieser extra ansprechbar
             //rspoint wird in JavaScript benötigt beim Jahreswechsel // Jahresklasse nur bei Mainpoints, damit nur diese beim Jahreswechsel eingeblendet werden!!
-        } else { //TODO: Bei Wechsel von Jahr diese Sidebar aktualisieren, indem andere Punkte auf hidden und angezeigt gestellt
+        } else { //Bei Wechsel von Jahr diese Sidebar aktualisieren, indem andere Punkte auf hidden und angezeigt gestellt
             echo "<li class='rspoint subpoint hidden ".$year. "_" . $unique_string . "'><a href='$value'>" . substr($name,1) . "</a></li>"; //Hier auch Schlüssel ausgeben, und Link a href mit Wert des assoziativen Arrays
             // Class 'hidden' = hide links // Year in Kombination mit UniqueString verhindert, dass Subpoints anderer Jahre eingeblendet werden, wenn doch derselbe UniqueString verwendet wird.
         }
