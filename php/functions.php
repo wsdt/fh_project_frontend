@@ -25,17 +25,6 @@ function createYearButtons () {
 //----------------------------------------------------------------------------------------------
 //LEFT (Left-Sidebar)
 function createSitemap($year) { //ARRAY wird übergeben
-	//hier if class enthält active, dann id als Variable speichern
-	/*if (empty($_REQUEST)) {
-		$year = 1560;
-	} else {
-		$year = $_REQUEST['activeyear']; //Nicht zu prüfen ob bereits active, da nach Wechsel von Jahr ohnehin gewechselt wird. 
-		
-		//Erst hier Nav öffnen (per JS)
-		echo "<script type='text/javascript'>openNewNav(".$year.");</script>";
-
-	}*/
-
     //------------------------------------- NEU
     // Alphabetisch alle Layer von vorne nach hinten in ein oder zwei Arrays speichern (1. Array: Layername, 2. Array: Layer selbst (evtl. assoziatives Array, dann nur eins)
     //z.B. $all_layer_links['layername'] = "layer als objekt bzw. kml file";
@@ -67,47 +56,9 @@ function createSitemap($year) { //ARRAY wird übergeben
         echo "</script>";
     }
 
-    /* OLD VERSION, did not work as expected
-
-     for ($j=0;$j<sizeof($year)-1;$j++) {
-        foreach (glob('layers/' . $year[$j] . '/*.kml') as $layer) {
-            $layername = substr($layer, 12, strlen(substr($layer, 12)) - 4); //remove file extension and file-path
-            echo "<a href='#' id='" . strtolower($layername) . "' class='yearlink link_".$year[$j]."'>" . $layername . "</a>";
-
-
-            //------------------------------------- ALT
-            //calculate layer for operating for each layer (also verschachtelte foreach)
-            $folders = glob('layers/*', GLOB_ONLYDIR);
-            $countfolders = 0;
-            foreach ($folders as $folder) {
-                if ($folder < $year[$j]) {
-                    //Ausrechnen wie viele Layer in anderen Ordnern drin, die VOR unserem Jahr sind.
-                    $countfolders += count(glob('layers/' . $folder . '/*.kml')); //Multiplikator errechnen, wie viele KML-Files sind in Jahresordner, der niedriger ist.
-                }
-            }
-            //davon ausgehen, dass $layers sortiert (alphabetisch)
-            //an welcher alphabetischen Reihenfolge steht aktueller Layer (also zusätzliche foreach, da für jeden Layer zu prüfen)
-            unset($tmpArray);
-            foreach (glob('layers/' . $year[$j] . '/*.kml') as $tmpLayer) {
-                $tmpLayername = substr($tmpLayer, 12, strlen(substr($tmpLayer, 12)) - 4);
-
-                //prüfen ob tmplayername und layername --> stelle reihenfolge --> in array speichern alle kml files und dann prüfen welcher inhalt mit layername übereinstimmt, dann index rauslesen
-                $tmpArray[] = $tmpLayername;
-            }
-
-            $index = NULL;
-            for ($i = 0; $i < count($tmpArray); $i++) {
-                if ($tmpArray[$i] == $layername) {
-                    $index = $i; //Save index, where our layer is
-                }
-            }
-
-            if ($index === NULL) {
-                echo "ERROR [2]: Failed to assign layer.";
-            }*/
-
     //Dadurch, dass Reload weg (nun Array ohne $_REQUEST verfügbar)
-    echo "<script type='text/javascript'>openNewNav(".$year[0].");</script>"; //Lade aktuelles Jahr bei Erstaufruf
+    echo "<script type='text/javascript'>openNewNav('".$year[0]."');"; //Lade aktuelles Jahr bei Erstaufruf
+    echo "rs_YearChange('".$year[0]."');</script>"; //rs_YearChange aktualisiert rechte Sidebar und öffnet diese automatisch.
 
 }
 
@@ -128,15 +79,50 @@ function createRightSidebar() {
     echo "<a href=\"javascript:void(0)\" class=\"closebtn\" onclick=\"closeRightSidebar()\">&times;</a>";
     echo "<ul id='rs_list'>";
 
-    //TODO: CREATE HERE ALL DROPDOWNS YOU WANT --> automatically by paths and save them in an array or do it in the method itself?!
-    //TODO: Create here assoziative arrays for each year (=folder).
+    //CREATE HERE ALL DROPDOWNS YOU WANT --> automatically by paths and save them in an array
+    //Save KML-Files in additional_data folders within each year. Mainpoints (files with starting '_', Subpoints (normal))
+    //Alphabetisch alle Layer von vorne nach hinten in ein Array speichern
 
+    $all_object_links = glob('layers/*/additional_data/*.kml'); //speichere alle Layer/Objects rein
+    $objectindex = 0;
+    $prev_prefix = "ERROR!";
+    foreach ($all_object_links as $link) {
+        $objectindex++;
+        $objectname = substr($link, 34, strlen(substr($link, 34)) - 4); //remove file extension and file path
+        $objectyear = substr($link, 7, 4);
+        $object_prefix = substr($link,28,6); //prefix length
+        $objectid = $objectyear . "_" . $object_prefix . strtolower($objectname); //Create unique id for each point (independent from year)
+        //echo "Name: " . $objectname . " / Jahr: " . $objectyear;
 
+        //Create here assoziatives Array wie unten manuell erzeugt für jeden Hauptpunkt mit Unterpunkten
+        //Prefix notwendig, damit entschieden werden kann, welcher Unterpunkt zu welchem Hauptpunkt gehört.
+        if (substr($objectname,0,2) == '__' || ($objectindex == (count($all_object_links)))/*is last element*/) { //Es wird davon ausgegangen, dass durch Prefix und Unterstrich genau richtig sortiert wurde
+            if ($objectindex == (count($all_object_links))) {
+                $points[$objectname] = $link; //adde last point to list before creating Dropdown
+                }
+            if (!empty($points)) {
+                /* WARNING: Created points won't be generated, if there is NO mainpoint (filename starting with '{prefix}__').
+                If there are mainpoints but you forget one to mark as a mainpoint, then all real subpoints and the actual mainpoint
+                will be handled as mainpoints!
 
-    $points['_Hauptpunkt'] = "LINKzuObjekt"; //Hauptpunkte müssen mit einem Unterstrich beginnen, wird bei der Ausgabe aber nicht angezeigt.
-    $points['Subpunkt 1'] = "LinkzuUnterobjekt";
-    $points['Subpunkt 2'] = "LinkZuUnteremObjekt";
-    createNewDropdown($points,"123");
+                We have to use /$prev_prefix not the current object because that is already a new prefix in the iteration!*/
+                createNewDropdown($points,$prev_prefix); //Other solution for prefix: md5(uniqid(rand(), true))
+            }
+            $points = array(); //Array leeren, soll aber Array bleiben (Egal ob var leer oder nicht.
+        }
+        //Wenn Mainpoint dann wird das auch als Objekt hier reingespeichert.
+        $points[$objectname] = $link; //TODO: Derweil lediglich Link als String reingespeichert (evtl. später mit Jquery o.Ä. oder was anderes hier statt Link rein)
+        $prev_prefix = $object_prefix; //save prev prefix for printing the dropdown menu
+
+        //Hauptpunkt muss im Index '0' gespeichert werden, also erster Wert im assoziativen Array
+        /* Static-Version:
+        $points['_Hauptpunkt'] = "LINKzuObjekt"; //Hauptpunkte müssen mit einem Unterstrich beginnen, wird bei der Ausgabe aber nicht angezeigt.
+        $points['Subpunkt 1'] = "LinkzuUnterobjekt";
+        $points['Subpunkt 2'] = "LinkZuUnteremObjekt";
+        createNewDropdown($points,"123"); //Standardmäßig werden alle zwar erstellt aber nicht angezeigt (inkl. Mainpoints)
+        */
+    }
+
     echo "</ul></div>";
 }
 
@@ -146,6 +132,8 @@ function createNewDropdown($points, $unique_string) { //Erstelle neuen Hauptpunk
     UNQIUE_STRING = willkürlicher String, um Unterpunkte eines Hauptpunkts von einem anderen zu unterscheiden.
     */
     //$count_subs = count($points); //Zähle Anzahl der Unterpunkte
+
+    //WICHTIG: Diese Funktion erstellt ALLE Main- und Subpoints aller Jahresfolder! Angezeigt werden Sie nach Auswählen eines Jahres.
 
     if(!is_array($points)) {
         echo "ERROR: \$points is not an array!";
@@ -157,18 +145,22 @@ function createNewDropdown($points, $unique_string) { //Erstelle neuen Hauptpunk
 
     foreach($points as $point) {
         $value = $point;
+        $year = substr($value,7,4);
         $name = ucfirst(array_search($point, $points));
-        $pos_isMainpoint = strpos($name, '_');
+        $pos_isMainpoint = strpos($name, '__'); //Hauptpunkt = erster Mainpoint, wenn keiner vorhanden werden nur die Unterpunkte erstellt (Resultat: Alle Punkte werden wie ein Mainpoint behandelt, aber keine Unterpunkte mehr möglich)
 
-        if ($pos_isMainpoint !== false && $pos_isMainpoint == 0) { //Punkt ist nur Oberpunkt wenn Unterstrich an erster Stelle
-            //Hier Onclick-Funktion zum Ein- und Ausklappen der Punkte
-            echo "<li class='mainpoint'><span onclick=rs_ShowHideSubpoints('".$unique_string."')> " . substr($name,1)."</span>"; //Gib Schlüssel des assoziativen Arrays zurück
-        } else {
-            echo "<li class='subpoint hidden " . $unique_string . "'><a href='$value'>" . $name . "</a></li>"; //Hier auch Schlüssel ausgeben, und Link a href mit Wert des assoziativen Arrays
-            // Class 'hidden' = hide sub links
+        //empty will be interpreted as false
+        if ($pos_isMainpoint !== false && $pos_isMainpoint == 0) { //Punkt ist nur Oberpunkt wenn doppelter Unterstrich vorhanden und an erster Stelle [da Name ja schon isoliert von Prefix] (nach Prefix)
+            //Hier Onclick-Funktion zum Ein- und Ausklappen der Punkte // Maintpoint hidden (standardmässig), damit nur für jeweiliges Jahr angezeigt
+            echo "<li class='".$year." rspoint mainpoint hidden m_".$year. "_" . $unique_string . "'><span onclick=rs_ShowHideSubpoints('".$year."_".$unique_string."')> " . substr($name,2)."</span>"; //Gib Schlüssel des assoziativen Arrays zurück
+            //Mainpoint darf den Präfix nicht als Klasse verwenden, da dieser sonst mit ein-/ausgeblendet wird beim Anklicken! Deshalb 'm_{prefix}', so auch dieser extra ansprechbar
+            //rspoint wird in JavaScript benötigt beim Jahreswechsel // Jahresklasse nur bei Mainpoints, damit nur diese beim Jahreswechsel eingeblendet werden!!
+        } else { //TODO: Bei Wechsel von Jahr diese Sidebar aktualisieren, indem andere Punkte auf hidden und angezeigt gestellt
+            echo "<li class='rspoint subpoint hidden ".$year. "_" . $unique_string . "'><a href='$value'>" . substr($name,1) . "</a></li>"; //Hier auch Schlüssel ausgeben, und Link a href mit Wert des assoziativen Arrays
+            // Class 'hidden' = hide links // Year in Kombination mit UniqueString verhindert, dass Subpoints anderer Jahre eingeblendet werden, wenn doch derselbe UniqueString verwendet wird.
         }
     }
-    echo "</li>";
+    echo "</li>"; //schließe mainpoint
 
 }
 

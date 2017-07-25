@@ -159,6 +159,9 @@ function openNewNav(year) {
     document.getElementById(year).style.backgroundColor = "rgba(204,204,204,1)";    //Active zur Klasse hinzuf�gen (noch nicht getestet) // Hier auch active von vorherigem Button entfernen nicht bei close!
     document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
 
+    // REFRESH right Sidebar (this line is quite important!)
+    rs_YearChange(year);
+
 }
 
 
@@ -166,6 +169,10 @@ function openNav() {
     document.getElementById("mySidenav").style.width = "250px";
     //document.getElementById("main").style.marginLeft = "250px"; //Auskommentiert, da main auskommentiert. 
     document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+
+    /*if (document.getElementsByClassName(year).length !== 0) {
+        openRightSidebar();
+    } //When clicked on the menu icon then open both navigations (when undesired, just comment out), menu will be only opened when additional data is available*/
 }
 
 /* Set the width of the side navigation to 0 and the left margin of the page content to 0, and the background color of body to white */
@@ -199,8 +206,36 @@ function openRightSidebar() {
     document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
 }
 
-function rs_ShowHideSubpoints(uniquestring) { //Ein-/Ausklappen der Unterpunkte in der rechten Sidebar.
-    const SUB_POINTS = document.getElementsByClassName(uniquestring);
+function rs_YearChange(year) { //Function will be called in OpenNewNav()
+    //Nur Mainpoints einblenden, für Subpoints ist rs_ShowHideSubpoints() zuständig
+    const ALLPOINTS = document.getElementsByClassName('rspoint'); /*$('rspoint');*/
+    const YEARPOINTS = document.getElementsByClassName(year); //$(year);
+    //var allsubpoints = document.getElementsByClassName('rssubpoint');
+
+
+    //Hide all main- and subpoints by default.
+    for (var a = 0; a < ALLPOINTS.length; a++) {
+        var listeclass = ALLPOINTS.item(a).classList;
+        if (!listeclass.contains('hidden')) {
+            listeclass.add('hidden'); //only add when class not active
+        }
+    }
+
+    if (YEARPOINTS.length === 0) {
+        console.warn("WARNING: Selected year has NO additional data!");
+    } else {
+        //Show only mainpoints of the year
+        for (var b = 0; b < YEARPOINTS.length; b++) {
+            YEARPOINTS.item(b).classList.remove('hidden');
+        }
+
+        //Only open right sidebar, when selected year has additional data
+        openRightSidebar(); //After Year has been changed, open right sidebar (if not desired, just comment out)
+    }
+}
+
+function rs_ShowHideSubpoints(uniqueyearstring) { //Ein-/Ausklappen der Unterpunkte in der rechten Sidebar.
+    const SUB_POINTS = document.getElementsByClassName(uniqueyearstring);
 
     for (sub_point of SUB_POINTS) {
         if (sub_point.className.indexOf('hidden') !== -1) {

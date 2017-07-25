@@ -39,7 +39,7 @@
 			 
 		</div>
 
-		<!-- Use any element to open the sidenav -->
+		<!-- Use a element to open the sidenav -->
 		<span onclick="openNav()"><img src="img/open_sidebar_icon.png" id="openSidebar" alt="sidebar" title="Klick mich an" width="50px" height="auto"/></span>
 
 		<!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page 
