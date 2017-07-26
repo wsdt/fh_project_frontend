@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="247a634b-678d-4796-b016-db781e771267" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Frontend.php" afterPath="$PROJECT_DIR$/Frontend.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/rs_objects_layerconfig.js" afterPath="$PROJECT_DIR$/js/rs_objects_layerconfig.js" />
-    </list>
+    <list default="true" id="247a634b-678d-4796-b016-db781e771267" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path=".idea/dataSources.local.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -636,15 +633,15 @@
       <workItem from="1498459349078" duration="31000" />
       <workItem from="1498459400178" duration="702000" />
       <workItem from="1498477498953" duration="6894000" />
-      <workItem from="1500918289878" duration="25069000" />
+      <workItem from="1500918289878" duration="26153000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="71028000" />
+    <option name="totallyTimeSpent" value="72112000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="1938" height="1048" extended-state="6" />
+    <frame x="-9" y="-9" width="1938" height="1048" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
