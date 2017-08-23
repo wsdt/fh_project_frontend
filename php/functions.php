@@ -161,6 +161,7 @@ function createNewDropdown($points, $unique_string) { //Erstelle neuen Hauptpunk
     $subs = numerisches Array wobei z.B. $subs[0] = 'IndexAlsString'->'WertHinterIndexAlsLayerOderObjektEtc'
     */
 
+    $xth_subpoint = 0;
     foreach($points as $point) {
         $value = $point;
         $year = substr($value,7,4);
@@ -170,35 +171,31 @@ function createNewDropdown($points, $unique_string) { //Erstelle neuen Hauptpunk
         //empty will be interpreted as false
         if ($pos_isMainpoint !== false && $pos_isMainpoint == 0) { //Punkt ist nur Oberpunkt wenn doppelter Unterstrich vorhanden und an erster Stelle [da Name ja schon isoliert von Prefix] (nach Prefix)
             //Hier Onclick-Funktion zum Ein- und Ausklappen der Punkte // Maintpoint hidden (standardmässig), damit nur für jeweiliges Jahr angezeigt
-            echo "<li class='".$year." rspoint mainpoint hidden m_".$year. "_" . $unique_string . "'><span onclick=rs_ShowHideSubpoints('".$year."_".$unique_string."')> " . substr($name,2)."</span>"; //Gib Schlüssel des assoziativen Arrays zurück
+            echo "<li class='".$year." rspoint mainpoint hidden' id='m_".$year. "_" . $unique_string . "'><span onclick=rs_ShowHideSubpoints('".$year."_".$unique_string."')> " . substr($name,2)."</span>"; //Gib Schlüssel des assoziativen Arrays zurück
             //Mainpoint darf den Präfix nicht als Klasse verwenden, da dieser sonst mit ein-/ausgeblendet wird beim Anklicken! Deshalb 'm_{prefix}', so auch dieser extra ansprechbar
             //rspoint wird in JavaScript benötigt beim Jahreswechsel // Jahresklasse nur bei Mainpoints, damit nur diese beim Jahreswechsel eingeblendet werden!!
         } else { //Bei Wechsel von Jahr diese Sidebar aktualisieren, indem andere Punkte auf hidden und angezeigt gestellt
-            echo "<li class='rspoint subpoint hidden ".$year. "_" . $unique_string . "'><a href='$value'>" . substr($name,1) . "</a></li>"; //Hier auch Schlüssel ausgeben, und Link a href mit Wert des assoziativen Arrays
+            $ob_layergroup = $year. "_" . $unique_string;
+            echo "<li class='rspoint subpoint hidden ".$ob_layergroup."'><a href='#' id='".$ob_layergroup."_".$xth_subpoint."'>" . substr($name,1) . "</a></li>"; //Hier auch Schlüssel ausgeben, und Link a href mit Wert des assoziativen Arrays
             // Class 'hidden' = hide links // Year in Kombination mit UniqueString verhindert, dass Subpoints anderer Jahre eingeblendet werden, wenn doch derselbe UniqueString verwendet wird.
+
+            //Assign LayerOnclick-Property
+            /*Make layers addable/removeable (layers assigned chronologically)
+            Mainpoints have no layer! Do not add a layer to a mainpoint or all assigned layers will be wrong! */
+            echo "<script type='text/javascript'>";
+            echo "$(document).ready(function() {";
+            echo "$('#".$ob_layergroup."_".$xth_subpoint."').on('click', function() {"; //If Subpoints have no mainpoint, here will come up an error!
+            echo "var tmpelement = document.getElementById('".$ob_layergroup."_".$xth_subpoint."');";
+            echo "if (tmpelement.className.indexOf('layerlink_active') !== -1) {"; //Prüfe ob Layer bereits gesetzt (über gesetzte Klasse, siehe addLayer
+            echo "tmpelement.classList.remove('layerlink_active');";
+            echo "window.map.removeLayer(all_objects[" . ($xth_subpoint) . "]);"; //careful with inkrement
+            echo "} else {";
+            echo "tmpelement.className += ' layerlink_active';";
+            echo "window.map.addLayer(all_objects[" . ($xth_subpoint) . "]);";
+            $xth_subpoint++; //Layerindex für nächsten Durchlauf erhöhen.
+            echo "}});});";
+            echo "</script>";
         }
-
-
-
-        //TODO: Assign LayerOnclick-Property
-        /*//Make layers addable/removeable (layers assigned chronologically) NICHT LÖSCHEN MUSS JA LAYERS ADDEN KÖNNEN
-        echo "<script type='text/javascript'>";
-        echo "$(document).ready(function() {";
-        echo "$('#".$layerid."').on('click', function() {";
-        echo "var tmpelement = document.getElementById('".$layerid."');";
-        echo "if (tmpelement.className.indexOf('layerlink_active') !== -1) {"; //Prüfe ob Layer bereits gesetzt (über gesetzte Klasse, siehe addLayer
-        echo "tmpelement.classList.remove('layerlink_active');";
-        echo "window.map.removeLayer(all_layers[" . ($layerindex) . "]);"; //careful with inkrement
-        echo "} else {";
-        echo "tmpelement.className += ' layerlink_active';";
-        echo "window.map.addLayer(all_layers[" . ($layerindex) . "]);";
-        $layerindex++; //Layerindex für nächsten Durchlauf erhöhen.
-        echo "}});});";
-        echo "</script>";*/
-
-
-
-
     }
     echo "</li>"; //schließe mainpoint
 

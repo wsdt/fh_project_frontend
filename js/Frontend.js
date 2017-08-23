@@ -2,11 +2,12 @@
  * Created by kevin on 21.04.2017.
  */
 
-
-
 // Create MAP
 var map;
 var countKmlFiles; //Create Var for counting kml files
+var countKmlObjects; //Create Var for counting kml objects in additional data folders
+
+
 function createMap() {
     map = new ol.Map({
         target: 'map',
@@ -24,6 +25,7 @@ function createMap() {
     //createLayers(); //create all layers
 
     countKmlFiles = document.getElementById('countKmlFiles').innerHTML; //Save count kml files
+    countKmlObjects = document.getElementById('object_kml_count').innerHTML; //Save count kml objects (for rs_objects_layerconfig.js)
 }
 
 
@@ -206,9 +208,11 @@ function rs_YearChange(year) { //Function will be called by Onclick-Yearbuttons
         }
     }
 
-    if (YEARPOINTS.length === 0 && ALLPOINTS.length > 0) { //Wenn gar keine Daten vorhanden sind (für kein Jahr), dann gib auch keine Warnung aus.
+    if (YEARPOINTS.length === 0 && ALLPOINTS.length > 0) { //Wenn gar keine Daten vorhanden sind (für kein Jahr), dann andere Meldung.
         console.warn("WARNING: Selected year has NO additional data!");
         closeRightSidebar(); //close right sidebar (maybe it was opened before)
+    } else if (YEARPOINTS.length === 0 && ALLPOINTS.length === 0) {
+        console.warn("WARNING: Could not find any additional data. Maybe your configuration is not up-to-date!");
     } else {
         //Show only mainpoints of the year
         for (var b = 0; b < YEARPOINTS.length; b++) {

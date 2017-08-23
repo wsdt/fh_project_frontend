@@ -10,13 +10,14 @@
     <script src="js/jquery-ui-1.9.2.custom/js/jquery-ui-1.9.2.custom.min.js" type="text/javascript"></script> <!-- Für Zeitleiste -->
     <link rel="stylesheet" href="css/Frontend.css" type="text/css"/>
     <script src="js/Frontend.js" type="text/javascript"></script>
+    <script src="js/rs_objects_layerconfig.js" type="text/javascript"></script>
     <!-- Für Slider -->
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <?php include './php/functions.php'; ?>
-    <script src="js/rs_objects_layerconfig.js" type="text/javascript"></script>
+
 
 
     

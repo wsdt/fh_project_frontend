@@ -81,8 +81,8 @@ html, body {
     color: #f1f1f1;
 }
 
-.sidenav .layerlink_active {
-    color:#fff; /* Sobald Layerlink angeklickt wurde bzw. der Layer gesetzt wurde, wird diese Klasse gesetzt. */
+.layerlink_active { /*layerlink_active should be global*/
+    color:#fff !important; /* Sobald Layerlink angeklickt wurde bzw. der Layer gesetzt wurde, wird diese Klasse gesetzt. */
 }
 
 /* Position and style the close button (top right corner) */
