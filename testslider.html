@@ -7,7 +7,7 @@
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-<script type="text/javascript">
+<!--<script type="text/javascript">
      //TODO: Instead of year buttons
         $(function() {
             var values = [156.0,188.0,201.6]; //Hier rein Jahre von PHP laden
@@ -20,27 +20,58 @@
                 }
             });
             function findNearest(includeLeft, includeRight, value) {
-                var nearest = null;
-                var diff = null;
-                for (var i = 0; i < values.length; i++) {
-                    if ((includeLeft && values[i] <= value) || (includeRight && values[i] >= value)) {
-                        var newDiff = Math.abs(value - values[i]);
-                        if (diff === null || newDiff < diff) {
-                            nearest = values[i];
-                            diff = newDiff;
+                if (value !== 0) {
+                    var nearest = null;
+                    var diff = null;
+                    for (var i = 0; i < values.length; i++) {
+                        if ((includeLeft && values[i] <= value) || (includeRight && values[i] >= value)) {
+                            var newDiff = Math.abs(value - values[i]);
+                            if (diff === null || newDiff < diff) {
+                                nearest = values[i];
+                                diff = newDiff;
+                            }
                         }
                     }
+                    return nearest;
                 }
-                return nearest;
             }
         });
 
 
 
-</script>
-
+</script>-->
+<style>
+    #slider .arrow {
+        font-size: 25px;
+        color:#fff;
+        background-size: cover;
+        padding-left:20px;
+        padding-right:20px;
+        margin-right:-20px;
+        border-width: 0;
+    }
+    #slider .inaktive_arrow {
+        background-image: url("img/Year_Arrow_grey.png");
+    }
+    #slider .aktive_arrow {
+        background-image: url("img/Year_Arrow.png");
+    }
+    #slider .inaktive_arrow:hover {
+        background-image: url("img/Year_Arrow_grey_hover.png");
+    }
+</style>
 </head>
-<body >
-<div id="slider"></div>
+<body>
+<div id="slider">
+    <!-- Zeitleiste anzeigen (im Hintergrund), Buttons darüber legen (in Abständen relativ zu ihren Jahreszahlen), und beim Draufklicken auf ein Jahr
+    geht mit Transitions oder JS der 'Aktiv-Balken' zum geklickten Jahr so als ob es eine Zeitleiste wäre. -->
+    <span class="arrow inaktive_arrow">1950</span>
+    <span class="arrow aktive_arrow">1999</span>
+    <span class="arrow inaktive_arrow">2016</span>
+
+
+
+
+</div>
 </body>
 </html>
