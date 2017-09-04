@@ -1,5 +1,28 @@
 <?php 
 //--------------------------------------------------------------------------------------------
+function createYearTimeline() {
+    $folders = glob('layers/*', GLOB_ONLYDIR);
+    echo "<div id='yearButtons'>";
+
+    $i=0; //tmp var fürs Durchzählen (Array)
+    $year = array();
+    foreach($folders as $folder) {
+        $year[$i++] = substr($folder,-4); // Jahreszahl (last 4 character) rausfiltern
+        //BUTTONS: aktiv bis Slider update
+    }
+    //convert php array to js array and send it to createSlider()
+    echo "<script type='text/javascript'>$(function() {createSlider(".json_encode($year).");});</script>";
+
+
+    echo "<div id='slider'></div>";
+
+    countKmlFiles(0, false); //make hidden field with counted kml files
+    countKmlFiles(0,true); //make hidden field with counted objects (kml files) for 
+
+    echo "</div>";
+    return $year;
+}
+
 //TOP (YEAR-Buttons)
 function createYearButtons () {
 	$folders = glob('layers/*', GLOB_ONLYDIR);

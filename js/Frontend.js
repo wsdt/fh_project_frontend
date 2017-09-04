@@ -143,8 +143,9 @@ function openNewNav(year) { //will be called by page load and rs_YearChange()
     //Remove all layers when year gets switched
     //removeAllLayers(); Eingestellt, siehe Funktion
 
-    document.getElementById(year).style.backgroundColor = "rgba(204,204,204,1)";    //Active zur Klasse hinzuf�gen (noch nicht getestet) // Hier auch active von vorherigem Button entfernen nicht bei close!
-    document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+    //If yearbuttons then aktiviere folgende Zeilen
+    /*TMP: document.getElementById(year).style.backgroundColor = "rgba(204,204,204,1)";    //Active zur Klasse hinzuf�gen (noch nicht getestet) // Hier auch active von vorherigem Button entfernen nicht bei close!
+    document.body.style.backgroundColor = "rgba(0,0,0,0.4)";*/
 }
 
 
@@ -238,31 +239,70 @@ function rs_ShowHideSubpoints(uniqueyearstring) { //Ein-/Ausklappen der Unterpun
 
 
 // SLIDER (ALPHA) --------------------------------------------------
-function createSlider() { //TODO: Instead of year buttons
-    $(function () {
-        var values = [0, 9, 12, 14]; //Hier rein Jahre von PHP laden
-        var slider = $("#slider").slider({
-            slide: function (event, ui) {
-                var includeLeft = event.keyCode !== $.ui.keyCode.RIGHT;
-                var includeRight = event.keyCode !== $.ui.keyCode.LEFT;
-                slider.slider('option', 'value', findNearest(includeLeft, includeRight, ui.value));
-                return false;
-            }
-        });
+function createSlider(values) {
+    //Create Max/Min routines for slider assignments
+    Array.prototype.max = function() {
+        return Math.max.apply(null,this);
+    }
+    Array.prototype.min = function() {
+        return Math.min.apply(null,this);
+    }
 
-        function findNearest(includeLeft, includeRight, value) {
-            var nearest = null;
-            var diff = null;
-            for (var i = 0; i < values.length; i++) {
-                if ((includeLeft && values[i] <= value) || (includeRight && values[i] >= value)) {
-                    var newDiff = Math.abs(value - values[i]);
-                    if (diff === null || newDiff < diff) {
-                        nearest = values[i];
-                        diff = newDiff;
-                    }
+    //var values = [0, 500, 750, 1000, 1250, 1500, 2000, 2500, 75000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 500000, 1000000];
+    //var values = [1880,1900,1940,1950,1990,2016];
+
+    var tooltip = function(event,ui) {
+        var curValue = ui.value || values.min();
+        var tooltip = '<div class="tooltip"><div class="tooltip-inner">' + curValue + '</div><div class="tooltip-arrow"></div></div>';
+        $('.ui-slider-handle').html(tooltip); //attach tooltip to slider handle
+    }
+
+    var slider = $("#slider").slider({
+        orientation: 'horizontal',
+        range: false,
+        min: values.min(),
+        max: values.max(),
+        values: [0],
+        slide: function(event, ui) {
+            var includeLeft = event.keyCode != $.ui.keyCode.RIGHT;
+            var includeRight = event.keyCode != $.ui.keyCode.LEFT;
+            var value = findNearest(includeLeft, includeRight, ui.value);
+            if (ui.value == ui.values[0]) {
+                slider.slider('values', 0, value);
+            }
+            /*$("#price-amount").html('$' + slider.slider('values', 0) + ' - $' + slider.slider('values', 1));*/
+            
+            return false;
+        },
+        change: tooltip,
+        stop: function(event,ui) {
+            rs_YearChange(ui.value);
+        },
+        create: tooltip
+        /*change: function(event, ui) { 
+            getHomeListings();
+        }*/
+    });
+    function findNearest(includeLeft, includeRight, value) {
+        var nearest = null;
+        var diff = null;
+        for (var i = 0; i < values.length; i++) {
+            if ((includeLeft && values[i] <= value) || (includeRight && values[i] >= value)) {
+                var newDiff = Math.abs(value - values[i]);
+                if (diff == null || newDiff < diff) {
+                    nearest = values[i];
+                    diff = newDiff;
                 }
             }
-            return nearest;
         }
-    });
+        return nearest;
+    }
+
+    /*for (var value in values) {
+        values.push(value.label);
+    }
+    var width = slider.width() / (values.length - 1);
+    slider.after('<div class="ui-slider-legend"><p style="width:' + width + 'px;" class="slider-legends">' + values.join('</p><p style="width:' + width + 'px;" class="slider-legends">') +'</p></div>');*/
+
+
 }

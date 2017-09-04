@@ -30,7 +30,7 @@
 //Ordnerstruktur aufbauen, wo automatisch index.html/php-Files reingeladen werden (also Buttons werden automatisch hinzugefuegt.
 
 	// Lade Jahreszahlen-Buttons
-    $year = createYearButtons();
+    $year = createYearTimeline();
 
 	// Lade linke Sidebar (Layer ausklappbar und auswählbar) Skript zum Ausklappen selbst in Frontend.JS
 	?>
