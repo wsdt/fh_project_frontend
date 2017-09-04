@@ -167,12 +167,21 @@ html, body {
     color:#fff;
 }
 
-#right_sidebar .mainpoint { /* LI */
+#rs_list {
+    list-style-type: none;
+}
 
+#right_sidebar .mainpoint { /* LI */
+    font-size: 25px;
+    padding: 8px 8px 8px 0;
+    color: #818181;
+    /*display: block;*/
+    transition: 0.3s
 }
 
 #right_sidebar .subpoint { /* LI */
-
+    font-size:20px;
+    padding: 0px 8px 8px 32px;
 }
 
 #right_sidebar .hidden {
@@ -180,9 +189,8 @@ html, body {
 }
 
 #right_sidebar a {
-    padding: 8px 8px 8px 32px;
     text-decoration: none;
-    font-size: 25px;
+    /*font-size: 25px;*/
     color: #818181;
     /*display: block;*/
     transition: 0.3s

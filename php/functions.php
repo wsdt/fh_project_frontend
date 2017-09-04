@@ -194,12 +194,12 @@ function createNewDropdown($points, $unique_string) { //Erstelle neuen Hauptpunk
         //empty will be interpreted as false
         if ($pos_isMainpoint !== false && $pos_isMainpoint == 0) { //Punkt ist nur Oberpunkt wenn doppelter Unterstrich vorhanden und an erster Stelle [da Name ja schon isoliert von Prefix] (nach Prefix)
             //Hier Onclick-Funktion zum Ein- und Ausklappen der Punkte // Maintpoint hidden (standardmässig), damit nur für jeweiliges Jahr angezeigt
-            echo "<li class='".$year." rspoint mainpoint hidden' id='m_".$year. "_" . $unique_string . "'><span onclick=rs_ShowHideSubpoints('".$year."_".$unique_string."')> " . substr($name,2)."</span>"; //Gib Schlüssel des assoziativen Arrays zurück
+            echo "<li class='".$year." rspoint mainpoint hidden' id='m_".$year. "_" . $unique_string . "'><span onclick=rs_ShowHideSubpoints('".$year."_".$unique_string."')>" . ucwords(strtolower(substr($name,2)))."</span>"; //Gib Schlüssel des assoziativen Arrays zurück
             //Mainpoint darf den Präfix nicht als Klasse verwenden, da dieser sonst mit ein-/ausgeblendet wird beim Anklicken! Deshalb 'm_{prefix}', so auch dieser extra ansprechbar
             //rspoint wird in JavaScript benötigt beim Jahreswechsel // Jahresklasse nur bei Mainpoints, damit nur diese beim Jahreswechsel eingeblendet werden!!
         } else { //Bei Wechsel von Jahr diese Sidebar aktualisieren, indem andere Punkte auf hidden und angezeigt gestellt
             $ob_layergroup = $year. "_" . $unique_string;
-            echo "<li class='rspoint subpoint hidden ".$ob_layergroup."'><a href='#' id='".$ob_layergroup."_".$xth_subpoint."'>" . substr($name,1) . "</a></li>"; //Hier auch Schlüssel ausgeben, und Link a href mit Wert des assoziativen Arrays
+            echo "<li class='rspoint subpoint hidden ".$ob_layergroup."'><a href='#' id='".$ob_layergroup."_".$xth_subpoint."'>" . ucwords(strtolower(substr($name,1))) . "</a></li>"; //Hier auch Schlüssel ausgeben, und Link a href mit Wert des assoziativen Arrays
             // Class 'hidden' = hide links // Year in Kombination mit UniqueString verhindert, dass Subpoints anderer Jahre eingeblendet werden, wenn doch derselbe UniqueString verwendet wird.
 
             //Assign LayerOnclick-Property
